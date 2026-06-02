@@ -1,6 +1,8 @@
+name: security-monitoring
+
 services:
   frontend:
-    image: security-monitoring/frontend:latest
+    image: security-monitoring/frontend:thesis
     build:
       context: ./src/frontend
     ports:
@@ -21,9 +23,14 @@ services:
       - cartservice
       - shippingservice
       - checkoutservice
+    labels:
+      project: security-monitoring
+      environment: thesis
+      layer: application
+      app: frontend
 
   checkoutservice:
-    image: security-monitoring/checkoutservice:latest
+    image: security-monitoring/checkoutservice:thesis
     build:
       context: ./src/checkoutservice
     environment:
@@ -42,31 +49,52 @@ services:
       - emailservice
       - currencyservice
       - cartservice
+    labels:
+      project: security-monitoring
+      environment: thesis
+      layer: application
+      app: checkoutservice
 
   productcatalogservice:
-    image: security-monitoring/productcatalogservice:latest
+    image: security-monitoring/productcatalogservice:thesis
     build:
       context: ./src/productcatalogservice
     environment:
       PORT: "3550"
       DISABLE_PROFILER: "1"
+    labels:
+      project: security-monitoring
+      environment: thesis
+      layer: application
+      app: productcatalogservice
 
   cartservice:
-    image: security-monitoring/cartservice:latest
+    image: security-monitoring/cartservice:thesis
     build:
       context: ./src/cartservice/src
     environment:
+      PORT: "7070"
       REDIS_ADDR: redis-cart:6379
     depends_on:
       - redis-cart
+    labels:
+      project: security-monitoring
+      environment: thesis
+      layer: application
+      app: cartservice
 
   redis-cart:
     image: redis:alpine
     volumes:
       - redis-data:/data
+    labels:
+      project: security-monitoring
+      environment: thesis
+      layer: application
+      app: redis-cart
 
   shippingservice:
-    image: security-monitoring/shippingservice:latest
+    image: security-monitoring/shippingservice:thesis
     build:
       context: ./src/shippingservice
     environment:
@@ -74,30 +102,50 @@ services:
       DISABLE_PROFILER: "1"
       DISABLE_TRACING: "1"
       DISABLE_STATS: "1"
+    labels:
+      project: security-monitoring
+      environment: thesis
+      layer: application
+      app: shippingservice
 
   paymentservice:
-    image: security-monitoring/paymentservice:latest
+    image: security-monitoring/paymentservice:thesis
     build:
       context: ./src/paymentservice
     environment:
       PORT: "50051"
       DISABLE_PROFILER: "1"
+    labels:
+      project: security-monitoring
+      environment: thesis
+      layer: application
+      app: paymentservice
 
   currencyservice:
-    image: security-monitoring/currencyservice:latest
+    image: security-monitoring/currencyservice:thesis
     build:
       context: ./src/currencyservice
     environment:
       PORT: "7000"
       DISABLE_PROFILER: "1"
+    labels:
+      project: security-monitoring
+      environment: thesis
+      layer: application
+      app: currencyservice
 
   emailservice:
-    image: security-monitoring/emailservice:latest
+    image: security-monitoring/emailservice:thesis
     build:
       context: ./src/emailservice
     environment:
       PORT: "8080"
       DISABLE_PROFILER: "1"
+    labels:
+      project: security-monitoring
+      environment: thesis
+      layer: application
+      app: emailservice
 
 volumes:
   redis-data:
