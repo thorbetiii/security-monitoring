@@ -1,26 +1,10 @@
-// Copyright 2018 Google LLC
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 package main
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"html/template"
 	"io"
-	"math/rand"
 	"net"
 	"net/http"
 	"os"
@@ -113,7 +97,6 @@ func (fe *frontendServer) homeHandler(w http.ResponseWriter, r *http.Request) {
 		"products":      ps,
 		"cart_size":     cartSize(cart),
 		"banner_color":  os.Getenv("BANNER_COLOR"), // illustrates canary deployments
-		"ad":            fe.chooseAd(r.Context(), []string{}, log),
 	})); err != nil {
 		log.Error(err)
 	}
@@ -174,12 +157,6 @@ func (fe *frontendServer) productHandler(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	// ignores the error retrieving recommendations since it is not critical
-	recommendations, err := fe.getRecommendations(r.Context(), sessionID(r), []string{id})
-	if err != nil {
-		log.WithField("error", err).Warn("failed to get product recommendations")
-	}
-
 	product := struct {
 		Item  *pb.Product
 		Price *pb.Money
@@ -196,11 +173,9 @@ func (fe *frontendServer) productHandler(w http.ResponseWriter, r *http.Request)
 	}
 
 	if err := templates.ExecuteTemplate(w, "product", injectCommonTemplateData(r, map[string]interface{}{
-		"ad":              fe.chooseAd(r.Context(), p.Categories, log),
 		"show_currency":   true,
 		"currencies":      currencies,
 		"product":         product,
-		"recommendations": recommendations,
 		"cart_size":       cartSize(cart),
 		"packagingInfo":   packagingInfo,
 	})); err != nil {
@@ -262,12 +237,6 @@ func (fe *frontendServer) viewCartHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	// ignores the error retrieving recommendations since it is not critical
-	recommendations, err := fe.getRecommendations(r.Context(), sessionID(r), cartIDs(cart))
-	if err != nil {
-		log.WithField("error", err).Warn("failed to get product recommendations")
-	}
-
 	shippingCost, err := fe.getShippingQuote(r.Context(), cart, currentCurrency(r))
 	if err != nil {
 		renderHTTPError(log, r, w, errors.Wrap(err, "failed to get shipping quote"), http.StatusInternalServerError)
@@ -305,7 +274,6 @@ func (fe *frontendServer) viewCartHandler(w http.ResponseWriter, r *http.Request
 
 	if err := templates.ExecuteTemplate(w, "cart", injectCommonTemplateData(r, map[string]interface{}{
 		"currencies":       currencies,
-		"recommendations":  recommendations,
 		"cart_size":        cartSize(cart),
 		"shipping_cost":    shippingCost,
 		"show_currency":    true,
@@ -375,7 +343,6 @@ func (fe *frontendServer) placeOrderHandler(w http.ResponseWriter, r *http.Reque
 	log.WithField("order", order.GetOrder().GetOrderId()).Info("order placed")
 
 	order.GetOrder().GetItems()
-	recommendations, _ := fe.getRecommendations(r.Context(), sessionID(r), nil)
 
 	totalPaid := *order.GetOrder().GetShippingCost()
 	for _, v := range order.GetOrder().GetItems() {
@@ -394,7 +361,6 @@ func (fe *frontendServer) placeOrderHandler(w http.ResponseWriter, r *http.Reque
 		"currencies":      currencies,
 		"order":           order.GetOrder(),
 		"total_paid":      &totalPaid,
-		"recommendations": recommendations,
 	})); err != nil {
 		log.Println(err)
 	}
@@ -522,17 +488,6 @@ func (fe *frontendServer) setCurrencyHandler(w http.ResponseWriter, r *http.Requ
 	w.WriteHeader(http.StatusFound)
 }
 
-// chooseAd queries for advertisements available and randomly chooses one, if
-// available. It ignores the error retrieving the ad since it is not critical.
-func (fe *frontendServer) chooseAd(ctx context.Context, ctxKeys []string, log logrus.FieldLogger) *pb.Ad {
-	ads, err := fe.getAd(ctx, ctxKeys)
-	if err != nil {
-		log.WithField("error", err).Warn("failed to retrieve ads")
-		return nil
-	}
-	return ads[rand.Intn(len(ads))]
-}
-
 func renderHTTPError(log logrus.FieldLogger, r *http.Request, w http.ResponseWriter, err error, code int) {
 	log.WithField("error", err).Error("request error")
 	errMsg := fmt.Sprintf("%+v", err)
@@ -584,14 +539,6 @@ func sessionID(r *http.Request) string {
 		return v.(string)
 	}
 	return ""
-}
-
-func cartIDs(c []*pb.CartItem) []string {
-	out := make([]string, len(c))
-	for i, v := range c {
-		out[i] = v.GetProductId()
-	}
-	return out
 }
 
 // get total # of items in cart
