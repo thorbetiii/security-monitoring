@@ -25,10 +25,7 @@ Removed `adservice` and `recommendationservice` from the reduced Online Boutique
 ## Deployment Configuration Updates
 
 - Updated `application/manifests/application-reduced.yaml` so the frontend no longer receives ad or recommendation service addresses.
-- Updated `application/manifests/application-full.yaml` by removing:
-  - frontend ad and recommendation environment variables
-  - `recommendationservice` Deployment, Service, and ServiceAccount
-  - `adservice` Deployment, Service, and ServiceAccount
+- Removed `application/manifests/application-full.yaml` to avoid deploying the original/full Online Boutique service set by mistake.
 - Added and adjusted root-level `docker-compose.yml` for the reduced application.
 - Fixed Docker Compose build contexts to use repo-root paths such as `./src/frontend` and `./src/checkoutservice`.
 
@@ -59,7 +56,6 @@ Removed `adservice` and `recommendationservice` from the reduced Online Boutique
 - `docker compose config --quiet`
 - `docker compose build frontend`
 - `kubectl apply --dry-run=client -f application/manifests/application-reduced.yaml`
-- `kubectl apply --dry-run=client -f application/manifests/application-full.yaml`
 - `git diff --check`
 - Search checks confirmed no active runtime references remain for `AD_SERVICE_ADDR` or `RECOMMENDATION_SERVICE_ADDR`.
 
