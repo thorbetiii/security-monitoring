@@ -1,0 +1,103 @@
+services:
+  frontend:
+    image: security-monitoring/frontend:latest
+    build:
+      context: ./src/frontend
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: "8080"
+      PRODUCT_CATALOG_SERVICE_ADDR: productcatalogservice:3550
+      CURRENCY_SERVICE_ADDR: currencyservice:7000
+      CART_SERVICE_ADDR: cartservice:7070
+      SHIPPING_SERVICE_ADDR: shippingservice:50051
+      CHECKOUT_SERVICE_ADDR: checkoutservice:5050
+      SHOPPING_ASSISTANT_SERVICE_ADDR: shoppingassistantservice:8080
+      ENABLE_ASSISTANT: "false"
+      ENABLE_PROFILER: "0"
+    depends_on:
+      - productcatalogservice
+      - currencyservice
+      - cartservice
+      - shippingservice
+      - checkoutservice
+
+  checkoutservice:
+    image: security-monitoring/checkoutservice:latest
+    build:
+      context: ./src/checkoutservice
+    environment:
+      PORT: "5050"
+      PRODUCT_CATALOG_SERVICE_ADDR: productcatalogservice:3550
+      SHIPPING_SERVICE_ADDR: shippingservice:50051
+      PAYMENT_SERVICE_ADDR: paymentservice:50051
+      EMAIL_SERVICE_ADDR: emailservice:8080
+      CURRENCY_SERVICE_ADDR: currencyservice:7000
+      CART_SERVICE_ADDR: cartservice:7070
+      ENABLE_PROFILER: "0"
+    depends_on:
+      - productcatalogservice
+      - shippingservice
+      - paymentservice
+      - emailservice
+      - currencyservice
+      - cartservice
+
+  productcatalogservice:
+    image: security-monitoring/productcatalogservice:latest
+    build:
+      context: ./src/productcatalogservice
+    environment:
+      PORT: "3550"
+      DISABLE_PROFILER: "1"
+
+  cartservice:
+    image: security-monitoring/cartservice:latest
+    build:
+      context: ./src/cartservice/src
+    environment:
+      REDIS_ADDR: redis-cart:6379
+    depends_on:
+      - redis-cart
+
+  redis-cart:
+    image: redis:alpine
+    volumes:
+      - redis-data:/data
+
+  shippingservice:
+    image: security-monitoring/shippingservice:latest
+    build:
+      context: ./src/shippingservice
+    environment:
+      PORT: "50051"
+      DISABLE_PROFILER: "1"
+      DISABLE_TRACING: "1"
+      DISABLE_STATS: "1"
+
+  paymentservice:
+    image: security-monitoring/paymentservice:latest
+    build:
+      context: ./src/paymentservice
+    environment:
+      PORT: "50051"
+      DISABLE_PROFILER: "1"
+
+  currencyservice:
+    image: security-monitoring/currencyservice:latest
+    build:
+      context: ./src/currencyservice
+    environment:
+      PORT: "7000"
+      DISABLE_PROFILER: "1"
+
+  emailservice:
+    image: security-monitoring/emailservice:latest
+    build:
+      context: ./src/emailservice
+    environment:
+      PORT: "8080"
+      DISABLE_PROFILER: "1"
+
+volumes:
+  redis-data:
