@@ -1,0 +1,52 @@
+clusterName: opensearch-cluster
+nodeGroup: single
+
+singleNode: true
+replicas: 1
+
+roles:
+  - master
+  - ingest
+  - data
+  - remote_cluster_client
+
+persistence:
+  enabled: false
+
+resources:
+  requests:
+    cpu: "500m"
+    memory: "1Gi"
+  limits:
+    cpu: "1"
+    memory: "2Gi"
+
+config:
+  opensearch.yml: |
+    cluster.name: opensearch-cluster
+    network.host: 0.0.0.0
+    discovery.type: single-node
+    plugins.security.disabled: true
+
+extraEnvs:
+  - name: DISABLE_INSTALL_DEMO_CONFIG
+    value: "true"
+  - name: DISABLE_SECURITY_PLUGIN
+    value: "true"
+
+service:
+  type: ClusterIP
+  httpPortName: http
+  transportPortName: transport
+
+startupProbe:
+  initialDelaySeconds: 60
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 30
+
+readinessProbe:
+  initialDelaySeconds: 60
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 10
