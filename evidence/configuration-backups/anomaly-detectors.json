@@ -1,0 +1,97 @@
+﻿{
+    "took":  2,
+    "timed_out":  false,
+    "_shards":  {
+                    "total":  1,
+                    "successful":  1,
+                    "skipped":  0,
+                    "failed":  0
+                },
+    "hits":  {
+                 "total":  {
+                               "value":  1,
+                               "relation":  "eq"
+                           },
+                 "max_score":  1.0,
+                 "hits":  [
+                              {
+                                  "_index":  ".opendistro-anomaly-detectors",
+                                  "_id":  "gBrZ054Bc5K54Bmgc9jj",
+                                  "_version":  3,
+                                  "_seq_no":  2,
+                                  "_primary_term":  1,
+                                  "_score":  1.0,
+                                  "_source":  {
+                                                  "description":  "",
+                                                  "rules":  [
+                                                                {
+                                                                    "action":  "IGNORE_ANOMALY",
+                                                                    "conditions":  [
+                                                                                       {
+                                                                                           "feature_name":  "log_count",
+                                                                                           "threshold_type":  "ACTUAL_OVER_EXPECTED_RATIO",
+                                                                                           "value":  0.2,
+                                                                                           "operator":  "LTE"
+                                                                                       },
+                                                                                       {
+                                                                                           "feature_name":  "log_count",
+                                                                                           "threshold_type":  "EXPECTED_OVER_ACTUAL_RATIO",
+                                                                                           "value":  0.2,
+                                                                                           "operator":  "LTE"
+                                                                                       }
+                                                                                   ]
+                                                                }
+                                                            ],
+                                                  "history":  40,
+                                                  "feature_attributes":  [
+                                                                             {
+                                                                                 "feature_id":  "fBrZ054Bc5K54Bmgc9gB",
+                                                                                 "feature_enabled":  true,
+                                                                                 "feature_name":  "log_count",
+                                                                                 "aggregation_query":  {
+                                                                                                           "log_count":  {
+                                                                                                                             "value_count":  {
+                                                                                                                                                 "field":  "@timestamp"
+                                                                                                                                             }
+                                                                                                                         }
+                                                                                                       }
+                                                                             }
+                                                                         ],
+                                                  "recency_emphasis":  2560,
+                                                  "frequency":  {
+                                                                    "period":  {
+                                                                                   "unit":  "Minutes",
+                                                                                   "interval":  1
+                                                                               }
+                                                                },
+                                                  "schema_version":  0,
+                                                  "time_field":  "@timestamp",
+                                                  "last_update_time":  1781670971522,
+                                                  "indices":  [
+                                                                  "application-logs-*"
+                                                              ],
+                                                  "window_delay":  {
+                                                                       "period":  {
+                                                                                      "unit":  "Minutes",
+                                                                                      "interval":  1
+                                                                                  }
+                                                                   },
+                                                  "detection_interval":  {
+                                                                             "period":  {
+                                                                                            "unit":  "Minutes",
+                                                                                            "interval":  1
+                                                                                        }
+                                                                         },
+                                                  "name":  "Application_Log_Volume_Anomaly_Detector",
+                                                  "filter_query":  {
+                                                                       "match_all":  {
+                                                                                         "boost":  1.0
+                                                                                     }
+                                                                   },
+                                                  "shingle_size":  8,
+                                                  "detector_type":  "SINGLE_ENTITY"
+                                              }
+                              }
+                          ]
+             }
+}
