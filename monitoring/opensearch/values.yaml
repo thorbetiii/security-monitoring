@@ -10,8 +10,14 @@ roles:
   - data
   - remote_cluster_client
 
+# Store OpenSearch indices, dashboard objects, detector configurations,
+# and anomaly results on a Kubernetes PersistentVolume.
 persistence:
-  enabled: false
+  enabled: true
+  enableInitChown: true
+  accessModes:
+    - ReadWriteOnce
+  size: 8Gi
 
 resources:
   requests:
