@@ -1,0 +1,12 @@
+Scenario: Formal normal-traffic baseline
+Start time: 2026-06-17T14:14:31.1790543+07:00
+Locust users: 3
+Spawn rate: 1 user/second
+Wait time: 2-5 seconds
+Planned duration: 45 minutes
+Documents before: 1082
+
+End time: 2026-06-17T15:01:38.0921853+07:00
+Actual duration: 47.12 minutes
+Documents after: 26476
+Documents generated: 25394
