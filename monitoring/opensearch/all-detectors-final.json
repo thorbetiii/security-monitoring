@@ -1,0 +1,489 @@
+{
+  "took": 2,
+  "timed_out": false,
+  "_shards": {
+    "total": 1,
+    "successful": 1,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 4,
+      "relation": "eq"
+    },
+    "max_score": 1,
+    "hits": [
+      {
+        "_index": ".opendistro-anomaly-detectors",
+        "_id": "gBrZ054Bc5K54Bmgc9jj",
+        "_version": 3,
+        "_seq_no": 2,
+        "_primary_term": 1,
+        "_score": 1,
+        "_source": {
+          "description": "",
+          "rules": [
+            {
+              "action": "IGNORE_ANOMALY",
+              "conditions": [
+                {
+                  "feature_name": "log_count",
+                  "threshold_type": "ACTUAL_OVER_EXPECTED_RATIO",
+                  "value": 0.2,
+                  "operator": "LTE"
+                },
+                {
+                  "feature_name": "log_count",
+                  "threshold_type": "EXPECTED_OVER_ACTUAL_RATIO",
+                  "value": 0.2,
+                  "operator": "LTE"
+                }
+              ]
+            }
+          ],
+          "history": 40,
+          "feature_attributes": [
+            {
+              "feature_id": "fBrZ054Bc5K54Bmgc9gB",
+              "feature_enabled": true,
+              "feature_name": "log_count",
+              "aggregation_query": {
+                "log_count": {
+                  "value_count": {
+                    "field": "@timestamp"
+                  }
+                }
+              }
+            }
+          ],
+          "recency_emphasis": 2560,
+          "frequency": {
+            "period": {
+              "unit": "Minutes",
+              "interval": 1
+            }
+          },
+          "schema_version": 0,
+          "time_field": "@timestamp",
+          "last_update_time": 1781670971522,
+          "indices": [
+            "application-logs-*"
+          ],
+          "window_delay": {
+            "period": {
+              "unit": "Minutes",
+              "interval": 1
+            }
+          },
+          "detection_interval": {
+            "period": {
+              "unit": "Minutes",
+              "interval": 1
+            }
+          },
+          "name": "Application_Log_Volume_Anomaly_Detector",
+          "filter_query": {
+            "match_all": {
+              "boost": 1
+            }
+          },
+          "shingle_size": 8,
+          "detector_type": "SINGLE_ENTITY"
+        }
+      },
+      {
+        "_index": ".opendistro-anomaly-detectors",
+        "_id": "kDgI9J4B5r61GbzyHLG3",
+        "_version": 1,
+        "_seq_no": 4,
+        "_primary_term": 4,
+        "_score": 1,
+        "_source": {
+          "description": "Detects abnormal increases in distinct frontend request paths that may indicate endpoint enumeration or application reconnaissance.",
+          "rules": [
+            {
+              "action": "IGNORE_ANOMALY",
+              "conditions": [
+                {
+                  "feature_name": "unique_path_count",
+                  "threshold_type": "ACTUAL_IS_BELOW_EXPECTED",
+                  "operator": null
+                }
+              ]
+            }
+          ],
+          "history": 40,
+          "feature_attributes": [
+            {
+              "feature_id": "jzgI9J4B5r61GbzyHLGw",
+              "feature_enabled": true,
+              "feature_name": "unique_path_count",
+              "aggregation_query": {
+                "unique_path_count": {
+                  "cardinality": {
+                    "precision_threshold": 100,
+                    "field": "http_req_path.keyword"
+                  }
+                }
+              }
+            }
+          ],
+          "recency_emphasis": 2560,
+          "frequency": {
+            "period": {
+              "unit": "Minutes",
+              "interval": 1
+            }
+          },
+          "schema_version": 0,
+          "time_field": "@timestamp",
+          "last_update_time": 1782210632886,
+          "indices": [
+            "application-logs-*"
+          ],
+          "window_delay": {
+            "period": {
+              "unit": "Minutes",
+              "interval": 1
+            }
+          },
+          "detection_interval": {
+            "period": {
+              "unit": "Minutes",
+              "interval": 1
+            }
+          },
+          "name": "AD_03_Endpoint_Scanning_Behaviour",
+          "filter_query": {
+            "bool": {
+              "filter": [
+                {
+                  "bool": {
+                    "filter": [
+                      {
+                        "term": {
+                          "kubernetes.container_name.keyword": {
+                            "boost": 1,
+                            "value": "frontend"
+                          }
+                        }
+                      },
+                      {
+                        "term": {
+                          "message.keyword": {
+                            "boost": 1,
+                            "value": "request complete"
+                          }
+                        }
+                      }
+                    ],
+                    "adjust_pure_negative": true,
+                    "must_not": [
+                      {
+                        "prefix": {
+                          "http_req_path.keyword": {
+                            "boost": 1,
+                            "value": "/static/"
+                          }
+                        }
+                      },
+                      {
+                        "term": {
+                          "http_req_path.keyword": {
+                            "boost": 1,
+                            "value": "/_healthz"
+                          }
+                        }
+                      }
+                    ],
+                    "boost": 1
+                  }
+                }
+              ],
+              "adjust_pure_negative": true,
+              "boost": 1
+            }
+          },
+          "shingle_size": 8,
+          "detector_type": "SINGLE_ENTITY"
+        }
+      },
+      {
+        "_index": ".opendistro-anomaly-detectors",
+        "_id": "WDla9J4B5r61GbzyczN7",
+        "_version": 1,
+        "_seq_no": 7,
+        "_primary_term": 4,
+        "_score": 1,
+        "_source": {
+          "description": "",
+          "rules": [
+            {
+              "action": "IGNORE_ANOMALY",
+              "conditions": [
+                {
+                  "feature_name": "checkout_count",
+                  "threshold_type": "ACTUAL_IS_BELOW_EXPECTED",
+                  "operator": null
+                }
+              ]
+            },
+            {
+              "action": "IGNORE_ANOMALY",
+              "conditions": [
+                {
+                  "feature_name": "unique_checkout_sessions",
+                  "threshold_type": "ACTUAL_IS_BELOW_EXPECTED",
+                  "operator": null
+                }
+              ]
+            }
+          ],
+          "history": 40,
+          "feature_attributes": [
+            {
+              "feature_id": "Vjla9J4B5r61GbzyczN1",
+              "feature_enabled": true,
+              "feature_name": "checkout_count",
+              "aggregation_query": {
+                "checkout_count": {
+                  "value_count": {
+                    "field": "@timestamp"
+                  }
+                }
+              }
+            },
+            {
+              "feature_id": "Vzla9J4B5r61GbzyczN1",
+              "feature_enabled": true,
+              "feature_name": "unique_checkout_sessions",
+              "aggregation_query": {
+                "unique_checkout_sessions": {
+                  "cardinality": {
+                    "precision_threshold": 100,
+                    "field": "session.keyword"
+                  }
+                }
+              }
+            }
+          ],
+          "recency_emphasis": 2560,
+          "frequency": {
+            "period": {
+              "unit": "Minutes",
+              "interval": 1
+            }
+          },
+          "schema_version": 0,
+          "time_field": "@timestamp",
+          "last_update_time": 1782216029051,
+          "indices": [
+            "application-logs-*"
+          ],
+          "window_delay": {
+            "period": {
+              "unit": "Minutes",
+              "interval": 1
+            }
+          },
+          "detection_interval": {
+            "period": {
+              "unit": "Minutes",
+              "interval": 1
+            }
+          },
+          "name": "AD_04R_Checkout_Workflow_Behaviour",
+          "filter_query": {
+            "bool": {
+              "filter": [
+                {
+                  "bool": {
+                    "filter": [
+                      {
+                        "term": {
+                          "kubernetes.container_name.keyword": {
+                            "boost": 1,
+                            "value": "frontend"
+                          }
+                        }
+                      },
+                      {
+                        "term": {
+                          "message.keyword": {
+                            "boost": 1,
+                            "value": "request complete"
+                          }
+                        }
+                      },
+                      {
+                        "term": {
+                          "http_req_path.keyword": {
+                            "boost": 1,
+                            "value": "/cart/checkout"
+                          }
+                        }
+                      },
+                      {
+                        "term": {
+                          "http_req_method.keyword": {
+                            "boost": 1,
+                            "value": "POST"
+                          }
+                        }
+                      }
+                    ],
+                    "adjust_pure_negative": true,
+                    "boost": 1
+                  }
+                }
+              ],
+              "adjust_pure_negative": true,
+              "boost": 1
+            }
+          },
+          "shingle_size": 8,
+          "detector_type": "SINGLE_ENTITY"
+        }
+      },
+      {
+        "_index": ".opendistro-anomaly-detectors",
+        "_id": "aTnM9J4B5r61Gbzyp2UM",
+        "_version": 1,
+        "_seq_no": 9,
+        "_primary_term": 4,
+        "_score": 1,
+        "_source": {
+          "description": "Detects abnormal increases in dynamic frontend request volume and response latency using unsupervised Random Cut Forest analysis.",
+          "rules": [
+            {
+              "action": "IGNORE_ANOMALY",
+              "conditions": [
+                {
+                  "feature_name": "request_count",
+                  "threshold_type": "ACTUAL_IS_BELOW_EXPECTED",
+                  "operator": null
+                }
+              ]
+            },
+            {
+              "action": "IGNORE_ANOMALY",
+              "conditions": [
+                {
+                  "feature_name": "average_latency_ms",
+                  "threshold_type": "ACTUAL_IS_BELOW_EXPECTED",
+                  "operator": null
+                }
+              ]
+            }
+          ],
+          "history": 40,
+          "feature_attributes": [
+            {
+              "feature_id": "ZznM9J4B5r61Gbzyp2UG",
+              "feature_enabled": true,
+              "feature_name": "request_count",
+              "aggregation_query": {
+                "request_count": {
+                  "value_count": {
+                    "field": "@timestamp"
+                  }
+                }
+              }
+            },
+            {
+              "feature_id": "aDnM9J4B5r61Gbzyp2UG",
+              "feature_enabled": true,
+              "feature_name": "average_latency_ms",
+              "aggregation_query": {
+                "average_latency_ms": {
+                  "avg": {
+                    "field": "http_resp_took_ms"
+                  }
+                }
+              }
+            }
+          ],
+          "recency_emphasis": 2560,
+          "frequency": {
+            "period": {
+              "unit": "Minutes",
+              "interval": 1
+            }
+          },
+          "schema_version": 0,
+          "time_field": "@timestamp",
+          "last_update_time": 1782223513355,
+          "indices": [
+            "application-logs-*"
+          ],
+          "window_delay": {
+            "period": {
+              "unit": "Minutes",
+              "interval": 1
+            }
+          },
+          "detection_interval": {
+            "period": {
+              "unit": "Minutes",
+              "interval": 1
+            }
+          },
+          "name": "AD_02R_Frontend_HTTP_Behaviour",
+          "filter_query": {
+            "bool": {
+              "filter": [
+                {
+                  "bool": {
+                    "filter": [
+                      {
+                        "term": {
+                          "kubernetes.container_name.keyword": {
+                            "boost": 1,
+                            "value": "frontend"
+                          }
+                        }
+                      },
+                      {
+                        "term": {
+                          "message.keyword": {
+                            "boost": 1,
+                            "value": "request complete"
+                          }
+                        }
+                      }
+                    ],
+                    "adjust_pure_negative": true,
+                    "must_not": [
+                      {
+                        "prefix": {
+                          "http_req_path.keyword": {
+                            "boost": 1,
+                            "value": "/static/"
+                          }
+                        }
+                      },
+                      {
+                        "term": {
+                          "http_req_path.keyword": {
+                            "boost": 1,
+                            "value": "/_healthz"
+                          }
+                        }
+                      }
+                    ],
+                    "boost": 1
+                  }
+                }
+              ],
+              "adjust_pure_negative": true,
+              "boost": 1
+            }
+          },
+          "shingle_size": 8,
+          "detector_type": "SINGLE_ENTITY"
+        }
+      }
+    ]
+  }
+}
