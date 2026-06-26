@@ -1,0 +1,394 @@
+CHECKOUT WORKFLOW ABUSE – FINAL EXPERIMENT SUMMARY
+Bachelor Thesis: Enhancing Security Monitoring in Microservice Environments Using AI-Driven Operations
+Scenario: Checkout Workflow Abuse
+Scenario status: VALIDATED AND COMPLETE
+Formal experiment date: 26 June 2026
+
+===============================================================================
+1. SCENARIO OBJECTIVE
+===============================================================================
+
+The purpose of this scenario was to test whether application-log anomaly
+detection could identify repeated, technically valid checkout operations that
+did not create a conventional infrastructure incident.
+
+The workload repeatedly completed the legitimate application workflow:
+
+1. GET a valid product page
+2. POST the product to the cart
+3. GET the cart
+4. POST /cart/checkout with valid customer and payment-form data
+
+The attack did not use malformed requests, invalid credentials, endpoint
+scanning, or high-volume generic flooding. It represented abuse of a valid
+business operation.
+
+===============================================================================
+2. SYSTEM AND DETECTOR
+===============================================================================
+
+Application namespace:
+- application
+
+Monitoring namespace:
+- monitoring
+
+Relevant detector:
+- Name: AD_04R_Checkout_Workflow_Behaviour
+- Detector ID: WDla9J4B5r61GbzyczN7
+- State during testing: RUNNING
+- Initialization progress: 100%
+- Model count: 1
+- Error state: empty
+
+Detector features:
+- checkout_count
+- unique_checkout_sessions
+
+Log filters used by the detector:
+- kubernetes.container_name.keyword = frontend
+- message.keyword = request complete
+- http_req_method.keyword = POST
+- http_req_path.keyword = /cart/checkout
+
+Relevant scripts:
+- experiments/baseline/checkout-normal-locustfile.py
+- experiments/attacks/checkout-abuse-locustfile.py
+- experiments/run-checkout-formal.ps1
+
+===============================================================================
+3. FIXED WORKLOAD CONFIGURATION
+===============================================================================
+
+Normal workload:
+- 2 persistent Locust users
+- Each user maintained its own HTTP session and cookie jar
+- Wait time: 60–90 seconds
+- Normal traffic ran continuously throughout the experiment
+
+Checkout-abuse workload:
+- 5 persistent Locust users
+- Spawn rate: 1 user/second
+- Wait time: 3–5 seconds
+- Duration: 5 minutes
+- Each user repeatedly completed the full valid checkout workflow
+
+The attack intensity was frozen after pilot validation and was not changed
+between the three formal runs.
+
+===============================================================================
+4. FORMAL EXPERIMENT PROTOCOL
+===============================================================================
+
+Each formal run used the following sequence:
+
+- 10 minutes normal preconditioning, not included in the measured result
+- 10 minutes measured normal baseline
+- 5 minutes normal traffic plus checkout-abuse traffic
+- 10 minutes measured normal recovery
+
+The two normal users remained active across all phases. The five abuse users
+were added only during the attack phase.
+
+This continuous-baseline method avoided artificial zero-traffic gaps between
+baseline, attack, and recovery.
+
+Formal runs included in the final dataset:
+- Run 01
+- Run 02
+- Run 03
+
+Earlier orchestration failures were archived separately and excluded because
+the complete formal protocol did not finish. They were not included in any
+detection-rate or performance calculation.
+
+===============================================================================
+5. FORMAL RUN RESULTS
+===============================================================================
+
+RUN 01
+------
+Measured baseline:
+- Checkout count: 15
+- Checkout rate: 1.50 checkouts/minute
+- Unique checkout sessions: 2
+- Average checkout latency: 13.60 ms
+- Frontend request count: 60
+- Frontend request rate: 6.00 requests/minute
+
+Checkout-abuse phase:
+- Total checkout count: 374
+- Abuse-only Locust checkout count: 366
+- Checkout rate: 74.65 checkouts/minute
+- Increase over baseline: 49.77x
+- Unique checkout sessions: 7
+- Average checkout latency: 8.02 ms
+- Frontend request count: 1,501
+- Frontend request rate: 299.58 requests/minute
+- Missing session values: 0
+- Checkout HTTP status: 200
+- Locust failures: 0
+
+Recovery:
+- Checkout count: 16
+- Checkout rate: 1.60 checkouts/minute
+- Unique checkout sessions: 2
+- Average checkout latency: 7.25 ms
+- Frontend request count: 64
+- Frontend request rate: 6.40 requests/minute
+
+AD-04R result:
+- Detected: Yes
+- Positive anomaly results: 1
+- Anomaly grade: 1.0000
+- Confidence: 0.996810
+- Detection latency: 105.025 seconds
+- Actual checkout_count: 55
+- Expected checkout_count: 2.0182
+- Actual unique_checkout_sessions: 6
+- Expected unique_checkout_sessions: 2.0090
+- checkout_count attribution: 87.34%
+- unique_checkout_sessions attribution: 12.66%
+
+Infrastructure result:
+- Grafana alerts: 0
+- Other anomaly-detector positives: 0
+- New container restarts: 0
+- Application pods ready after run: 9/9
+
+
+RUN 02
+------
+Measured baseline:
+- Checkout count: 16
+- Checkout rate: 1.60 checkouts/minute
+- Unique checkout sessions: 2
+- Average checkout latency: 7.88 ms
+- Frontend request count: 64
+- Frontend request rate: 6.40 requests/minute
+
+Checkout-abuse phase:
+- Total checkout count: 376
+- Abuse-only Locust checkout count: 368
+- Checkout rate: 75.04 checkouts/minute
+- Increase over baseline: 46.91x
+- Unique checkout sessions: 7
+- Average checkout latency: 8.19 ms
+- Frontend request count: 1,509
+- Frontend request rate: 301.15 requests/minute
+- Missing session values: 0
+- Checkout HTTP status: 200
+- Locust failures: 0
+
+Recovery:
+- Checkout count: 18
+- Checkout rate: 1.80 checkouts/minute
+- Unique checkout sessions: 2
+- Average checkout latency: 7.17 ms
+- Frontend request count: 72
+- Frontend request rate: 7.20 requests/minute
+
+AD-04R result:
+- Detected: Yes
+- Positive anomaly results: 1
+- Anomaly grade: 1.0000
+- Confidence: 0.996903
+- Detection latency: 120.184 seconds
+- Actual checkout_count: 73
+- Expected checkout_count: 2.2647
+- Actual unique_checkout_sessions: 6
+- Expected unique_checkout_sessions: 6
+- checkout_count attribution: 90.12%
+- unique_checkout_sessions attribution: 9.88%
+
+Infrastructure result:
+- Grafana alerts: 0
+- Other anomaly-detector positives: 0
+- New container restarts: 0
+- Application pods ready after run: 9/9
+
+
+RUN 03
+------
+Measured baseline:
+- Checkout count: 16
+- Checkout rate: 1.60 checkouts/minute
+- Unique checkout sessions: 2
+- Average checkout latency: 7.06 ms
+- Frontend request count: 64
+- Frontend request rate: 6.40 requests/minute
+
+Checkout-abuse phase:
+- Total checkout count: 373
+- Abuse-only Locust checkout count: 366
+- Checkout rate: 74.42 checkouts/minute
+- Increase over baseline: 46.52x
+- Unique checkout sessions: 7
+- Average checkout latency: 8.10 ms
+- Frontend request count: 1,497
+- Frontend request rate: 298.68 requests/minute
+- Missing session values: 0
+- Checkout HTTP status: 200
+- Locust failures: 0
+
+Recovery:
+- Checkout count: 17
+- Checkout rate: 1.70 checkouts/minute
+- Unique checkout sessions: 2
+- Average checkout latency: 8.53 ms
+- Frontend request count: 68
+- Frontend request rate: 6.80 requests/minute
+
+AD-04R result:
+- Detected: Yes
+- Positive anomaly results: 1
+- Anomaly grade: 0.6875
+- Confidence: 0.996978
+- Detection latency: 113.545 seconds
+- Actual checkout_count: 62
+- Expected checkout_count: 2.0067
+- Actual unique_checkout_sessions: 5
+- Expected unique_checkout_sessions: 2.0062
+- checkout_count attribution: 88.84%
+- unique_checkout_sessions attribution: 11.16%
+
+Infrastructure result:
+- Grafana alerts: 0
+- Other anomaly-detector positives: 0
+- New container restarts: 0
+- Application pods ready after run: 9/9
+
+===============================================================================
+6. AGGREGATE RESULTS
+===============================================================================
+
+Formal runs:
+- Total valid formal runs: 3
+- AD-04R detections: 3
+- Detection rate: 100%
+
+Workload:
+- Total abuse-only Locust checkouts: 1,100
+- Total attack-phase checkouts, including normal users: 1,123
+- Total attack-phase frontend requests: 4,507
+- Total request failures: 0
+- Missing checkout-session values: 0
+
+Average phase rates:
+- Average baseline checkout rate: 1.57 checkouts/minute
+- Average attack checkout rate: 74.70 checkouts/minute
+- Average recovery checkout rate: 1.70 checkouts/minute
+- Average increase over baseline: 47.74x
+- Average attack frontend rate: 299.80 requests/minute
+
+Detector performance:
+- Average anomaly grade: 0.8958
+- Average confidence: 0.996897
+- Average detection latency: 112.918 seconds
+- Positive AD-04R anomalies: 3
+- Positive results from AD-01, AD-02R, and AD-03: 0
+
+Infrastructure and availability:
+- Grafana alert activations: 0 across all three runs
+- New container restarts: 0
+- Pod-readiness failures: 0
+- Application availability after each run: 9/9 pods ready
+- Checkout CPU remained below the 0.03-core alert threshold
+- Frontend CPU remained below the 0.05-core alert threshold
+- Pod memory remained below the approximately 143 MiB alert threshold
+
+Comparison with HTTP flood:
+- Checkout-abuse frontend rate: 299.80 requests/minute on average
+- HTTP-flood frontend rate: approximately 1,234.5 requests/minute
+- Checkout-abuse traffic was approximately 24.29% of the HTTP-flood rate
+
+===============================================================================
+7. INTERPRETATION
+===============================================================================
+
+The checkout-abuse workload caused a large change in business-operation
+frequency without causing an infrastructure outage or conventional resource
+incident.
+
+The checkout rate increased by approximately 48 times relative to the normal
+baseline, but:
+
+- all requests succeeded;
+- checkout latency remained stable;
+- all pods remained ready;
+- no container restart count increased;
+- no CPU, memory, restart, or readiness alert fired.
+
+AD-04R detected the attack onset in all three formal runs. The detector was
+primarily influenced by checkout_count, with attribution between 87.34% and
+90.12%. The unique-session feature also contributed, but to a smaller degree.
+
+Run 02 showed that the detector could still identify abnormal checkout
+frequency even when the observed session count matched the model’s expected
+session count. This indicates that the checkout-frequency feature was
+independently useful.
+
+Run 03 produced a lower anomaly grade of 0.6875 while still producing a
+positive result with high confidence. One possible explanation is partial
+adaptation of the online Random Cut Forest model after repeated exposure to a
+similar pattern. This is a plausible interpretation, not a separately proven
+cause.
+
+The detector flagged the onset of the behavioral transition. Later high-rate
+intervals generally received grade zero because they represented continued
+instances of the same already-observed attack state rather than new
+transitions.
+
+===============================================================================
+8. FINAL CONCLUSION
+===============================================================================
+
+The checkout-workflow anomaly detector successfully detected business-logic
+abuse in 3 of 3 formal runs, giving a 100% formal detection rate.
+
+The scenario demonstrated that repeated valid checkout operations can remain
+below infrastructure-alert thresholds while still representing abnormal
+application behavior.
+
+The main experimental conclusion is:
+
+Application-log behavioral anomaly detection identified repeated,
+legitimate-looking checkout operations that conventional CPU, memory,
+restart, and readiness monitoring did not classify as infrastructure
+incidents.
+
+This result supports the use of OpenSearch anomaly detection as a complement
+to Prometheus and Grafana monitoring. Grafana remained useful for confirming
+system health and availability, while AD-04R provided visibility into abnormal
+business-workflow behavior.
+
+===============================================================================
+9. EVIDENCE LOCATIONS
+===============================================================================
+
+Scenario root:
+- evidence/05-checkout-abuse/
+
+Calibration:
+- evidence/05-checkout-abuse/pilot-01/
+
+Formal runs:
+- evidence/05-checkout-abuse/run-01/
+- evidence/05-checkout-abuse/run-02/
+- evidence/05-checkout-abuse/run-03/
+
+Each formal run contains:
+- Locust CSV statistics
+- Locust HTML reports
+- selected Locust summaries
+- formal timestamps
+- pod state before and after the run
+- restart counts before and after the run
+- OpenSearch phase aggregations
+- AD-04R all-result and positive-result queries
+- cross-detector query results
+- Grafana and OpenSearch screenshots
+
+Invalid orchestration attempts:
+- archived separately under evidence/05-checkout-abuse/
+- excluded from formal results

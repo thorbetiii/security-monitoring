@@ -1,0 +1,61 @@
+{
+  "took": 1,
+  "timed_out": false,
+  "_shards": {
+    "total": 1,
+    "successful": 1,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 1,
+      "relation": "eq"
+    },
+    "max_score": null,
+    "hits": [
+      {
+        "_index": ".opendistro-anomaly-results-history-2026.06.17-1",
+        "_id": "C00v_J4B5y_985KNgwru",
+        "_version": 1,
+        "_seq_no": 21784,
+        "_primary_term": 6,
+        "_score": null,
+        "_source": {
+          "execution_start_time": 1782347432941,
+          "relevant_attribution": [
+            {
+              "feature_id": "jzgI9J4B5r61GbzyHLGw",
+              "data": 1
+            }
+          ],
+          "data_end_time": 1782347372915,
+          "confidence": 0.9924253796831359,
+          "data_start_time": 1782347312915,
+          "feature_data": [
+            {
+              "feature_id": "jzgI9J4B5r61GbzyHLGw",
+              "feature_name": "unique_path_count",
+              "data": 28
+            }
+          ],
+          "expected_values": [
+            {
+              "likelihood": 1,
+              "value_list": [
+                {
+                  "feature_id": "jzgI9J4B5r61GbzyHLGw",
+                  "data": 3.0028181076049805
+                }
+              ]
+            }
+          ],
+          "anomaly_grade": 1
+        },
+        "sort": [
+          1782347432941
+        ]
+      }
+    ]
+  }
+}

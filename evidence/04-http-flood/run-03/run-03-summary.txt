@@ -1,0 +1,91 @@
+Scenario: Controlled Application-Layer HTTP Flood
+Experiment: Formal Run 03
+
+Experiment start: 2026-06-25T20:22:50.2388141+07:00
+Attack start: 2026-06-25T20:32:50.2637105+07:00
+Attack end: 2026-06-25T20:37:50.8269900+07:00
+Recovery end: 2026-06-25T20:47:50.8380872+07:00
+
+Test Configuration
+
+Flood users: 20
+Spawn rate: 5 users/second
+Flood duration: 5 minutes
+Normal baseline: 10 minutes
+Recovery observation: 10 minutes
+
+Locust Results
+
+Flood requests: 5,930
+Failed requests: 0
+Average request rate: 19.8917 requests/second
+Average client-observed response time: 22.0696 ms
+Maximum client-observed response time: 2,099.5106 ms
+
+Traffic Analysis
+
+Normal request rate: 33.78 requests/minute
+Full flood request rate: 1,234.50 requests/minute
+Recovery request rate: 34.89 requests/minute
+Increase over normal traffic: approximately 36.55 times
+Unique request paths: 3 throughout all phases
+Observed HTTP status codes: all 200
+Request-rate recovery: confirmed
+
+OpenSearch Anomaly Detection
+
+AD-01 Application Log Volume:
+The detector processed all 25 experiment intervals. During the flood, log_count reached values including 4,690, 11,424, 11,898, 11,640, 11,474, and 6,984. Confidence remained 1.0, but anomaly_grade remained 0. Therefore, AD-01 processed the attack data but did not detect Run 03.
+
+AD-02R Frontend HTTP Behaviour:
+The detector processed all 25 experiment intervals. During the flood, request_count reached approximately 903–1,237 requests per interval. Average latency remained approximately 7.30–9.12 ms. Confidence increased from approximately 0.86 to 0.87, but anomaly_grade remained 0. Therefore, AD-02R processed the attack data but did not detect Run 03.
+
+AD-03 Endpoint Scanning Behaviour:
+No positive anomaly was produced. This was the correct result because endpoint diversity remained fixed at three paths.
+
+All detector profiles reported:
+
+* State: RUNNING
+* Error: empty
+* Initialization progress: 100%
+* Model count: 1
+
+Grafana Alerting
+
+Frontend CPU Spike:
+
+* Pending: 20:35:50 at 0.054717 CPU cores
+* Firing: 20:36:50 at 0.073450 CPU cores
+* Normal: 20:40:50 at 0.038757 CPU cores
+* Firing latency: approximately 239.7 seconds
+* Resolution: approximately 179.2 seconds after attack end
+
+High CPU Usage by Pod:
+
+* Affected pod: currencyservice-648f775598-d5j8f
+* Pending: 20:36:51 at 0.054506 CPU cores
+* Firing: 20:37:51 at 0.061797 CPU cores
+* Normal: 20:38:51 at 0.048898 CPU cores
+* Firing latency: approximately 300.7 seconds
+
+High Memory Usage by Pod:
+
+* Affected pod: currencyservice-648f775598-d5j8f
+* Pending: 20:34:55 at 182,943,744 bytes
+* Firing: 20:35:55 at 185,561,088 bytes
+* Memory remained elevated throughout the recovery period
+* Dashboard peak was approximately 296 MiB
+
+Availability
+
+All nine application pods remained ready.
+No new container restart-count changes occurred.
+Application Pod Not Ready did not fire.
+Application Pod Restart Detected did not fire.
+No request failures occurred.
+
+Conclusion
+
+Run 03 reproduced the controlled HTTP flood successfully. The attack increased legitimate-route request traffic by approximately 36.55 times and caused measurable CPU and memory pressure without causing request failures, pod restarts, or loss of availability.
+
+Grafana’s deterministic CPU and memory rules detected the resource impact. AD-01 and AD-02R received and processed the attack data but assigned anomaly grade 0. AD-03 correctly remained quiet because the attack did not increase endpoint diversity.

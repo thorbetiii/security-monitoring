@@ -1,0 +1,4 @@
+Run,ScanRequests,Failures,RequestRate,AverageResponseMs,MaxPaths,AnomalyPaths,ExpectedPaths,AnomalyGrade,Confidence,DetectionLatencySeconds,NewRestarts,RecoveryPaths
+01,1119,0,3.7387,7.3286,63,28,3.0028,1.0,0.9924,74.6,0,3
+02,1117,0,3.7352,7.3485,63,25,3.0061,1.0,0.9933,73.6,0,3
+03,1109,0,3.7081,7.4219,63,63,3.0064,1.0,0.9935,120.1,0,3

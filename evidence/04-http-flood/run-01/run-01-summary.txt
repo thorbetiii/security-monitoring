@@ -1,0 +1,63 @@
+Scenario: Controlled Application-Layer HTTP Flood
+Experiment: Formal Run 01
+
+Attack start: 2026-06-25T16:15:06.8844167+07:00
+Attack end: 2026-06-25T16:20:07.4493997+07:00
+Recovery end: 2026-06-25T16:30:07.4788949+07:00
+
+Flood users: 20
+Flood duration: 5 minutes
+Flood requests: 5930
+Locust failures: 0
+Average flood rate: 19.8914 requests/second
+Average Locust response time: 19.4270 ms
+
+Normal frontend rate: approximately 34.2 requests/minute
+Full flood rate: approximately 1233.8 requests/minute
+Traffic increase: approximately 36 times
+Unique paths: 3 during normal, flood, and recovery
+HTTP status codes: all observed responses were 200
+Request-rate recovery: confirmed
+
+AD-01:
+Actual log count: 11354
+Expected log count: 445.7258
+Anomaly grade: 1.0
+Confidence: 1.0
+Detection latency: approximately 129.3 seconds
+
+AD-02R:
+No positive anomaly result during Formal Run 01
+
+AD-03:
+No positive anomaly result, as expected for fixed route diversity
+
+Grafana:
+Frontend CPU Spike pending: 16:17:50
+Frontend CPU Spike firing: 16:18:50
+Frontend CPU Spike resolved: 16:22:50
+Frontend CPU firing latency: approximately 223.1 seconds
+
+High CPU Usage by Pod:
+Affected pod: currencyservice-7674bb75b9-n97gp
+Pending: 16:18:51
+Firing: 16:19:51
+Resolved: 16:21:21
+
+High Memory Usage by Pod:
+Affected pod: currencyservice-7674bb75b9-n97gp
+Pending: 16:17:55
+Firing: 16:18:55
+Did not resolve within the recorded recovery period
+
+Availability:
+Application pods ready after experiment: 9/9
+New pod restarts: 0
+Pod Not Ready alert: did not fire
+Pod Restart Detected alert: did not fire
+
+Interpretation:
+The HTTP flood increased request volume by approximately 36 times.
+AD-01 and Grafana resource rules detected the attack, while AD-02R
+did not emit a positive anomaly in this formal repetition. The service
+remained available, but currencyservice memory remained elevated.

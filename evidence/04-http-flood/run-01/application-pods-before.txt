@@ -1,0 +1,10 @@
+NAME                                    READY   STATUS    RESTARTS      AGE     IP           NODE             NOMINATED NODE   READINESS GATES
+cartservice-55d4754bd7-kvx42            1/1     Running   9 (86m ago)   22d     10.1.2.244   docker-desktop   <none>           <none>
+checkoutservice-69775cb597-pzkcj        1/1     Running   9 (86m ago)   22d     10.1.2.242   docker-desktop   <none>           <none>
+currencyservice-7674bb75b9-n97gp        1/1     Running   0             2m49s   10.1.2.255   docker-desktop   <none>           <none>
+emailservice-d8847778d-zc7mz            1/1     Running   9 (86m ago)   22d     10.1.2.241   docker-desktop   <none>           <none>
+frontend-545d4c6658-jtkjk               1/1     Running   9 (86m ago)   22d     10.1.2.237   docker-desktop   <none>           <none>
+paymentservice-57c96df968-lshzp         1/1     Running   9 (86m ago)   22d     10.1.2.247   docker-desktop   <none>           <none>
+productcatalogservice-f9cffdb98-s4c5n   1/1     Running   9 (86m ago)   22d     10.1.2.243   docker-desktop   <none>           <none>
+redis-cart-5dc857bb5d-j48tx             1/1     Running   9 (86m ago)   22d     10.1.2.253   docker-desktop   <none>           <none>
+shippingservice-d8f49964c-6gkjc         1/1     Running   9 (86m ago)   22d     10.1.2.248   docker-desktop   <none>           <none>

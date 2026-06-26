@@ -1,0 +1,38 @@
+Scenario: Controlled Endpoint Enumeration
+Experiment: Formal Run 03
+
+Attack start: 2026-06-25T11:19:32.7965495+07:00
+Attack end: 2026-06-25T11:24:33.3771485+07:00
+Recovery end: 2026-06-25T11:34:33.3775332+07:00
+
+Scan duration: 5 minutes
+Scan requests: 1109
+Locust failures: 0
+Average request rate: 3.7081 requests/second
+Average response time: 7.4219 ms
+
+Normal unique paths: 3
+Maximum attack unique paths: 63
+Recovery unique paths: 3
+Attack-aligned frontend records: 1315
+HTTP 404 responses: 1092
+HTTP 200 responses: 223
+
+AD-03 anomalous-window actual value: 63
+AD-03 expected value: 3.0064
+Increase over expected value: 20.96 times
+AD-03 anomaly grade: 1.0
+AD-03 confidence: 0.9935
+AD-03 result execution time: 2026-06-25T11:21:32.930+07:00
+Detection latency from attack start: 120.1 seconds
+Number of positive anomaly records: 1
+
+Application pods ready: 9/9
+New pod restarts: 0
+
+Interpretation:
+AD-03 detected controlled endpoint enumeration with a maximum anomaly
+grade and high confidence. Route diversity increased from three normal
+paths to sixty-three paths and returned to three after the scan stopped.
+The application remained available without pod restarts or resource
+instability.

@@ -1,0 +1,10 @@
+NAME                                                     READY   STATUS             RESTARTS          AGE    IP             NODE             NOMINATED NODE   READINESS GATES
+alertmanager-monitoring-kube-prometheus-alertmanager-0   2/2     Running            20 (104m ago)     23d    10.1.3.19      docker-desktop   <none>           <none>
+fluent-bit-6vtww                                         1/1     Running            8 (103m ago)      2d6h   10.1.3.9       docker-desktop   <none>           <none>
+monitoring-grafana-9555d54c-pmj4t                        3/3     Running            30 (104m ago)     23d    10.1.3.21      docker-desktop   <none>           <none>
+monitoring-kube-prometheus-operator-57bb844c8c-9rhmf     1/1     Running            16 (104m ago)     23d    10.1.3.11      docker-desktop   <none>           <none>
+monitoring-kube-state-metrics-7f7f8474d9-b2j8n           1/1     Running            16 (104m ago)     23d    10.1.3.17      docker-desktop   <none>           <none>
+monitoring-prometheus-node-exporter-h9qm7                0/1     CrashLoopBackOff   1820 (116s ago)   23d    192.168.65.3   docker-desktop   <none>           <none>
+opensearch-cluster-single-0                              1/1     Running            6 (104m ago)      8d     10.1.3.20      docker-desktop   <none>           <none>
+opensearch-dashboards-7d84b76f74-b9rvd                   1/1     Running            4 (104m ago)      2d3h   10.1.3.12      docker-desktop   <none>           <none>
+prometheus-monitoring-kube-prometheus-prometheus-0       2/2     Running            20 (104m ago)     23d    10.1.3.18      docker-desktop   <none>           <none>

@@ -1,0 +1,17 @@
+Scenario: Checkout Workflow Abuse
+Formal run: 02
+
+Protocol:
+- 10 minutes normal preconditioning
+- 10 minutes measured normal baseline
+- 5 minutes checkout abuse
+- 10 minutes measured normal recovery
+
+Normal workload:
+- 2 persistent users
+- Runs continuously across all phases
+
+Attack workload:
+- 5 persistent users
+- Spawn rate: 1 user/second
+- Wait time: 3-5 seconds

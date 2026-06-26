@@ -1,0 +1,8 @@
+
+Type Name                   Request Count Failure Count Requests/s         Average Response Time Min Response Time Max Response Time
+---- ----                   ------------- ------------- ----------         --------------------- ----------------- -----------------
+POST /cart/checkout [abuse] 366           0             1.2255910494980056 11.30677513666327     8.358600003703032 61.08169999788515
+     Aggregated             1469          0             4.919107245116312  14.257862695765695    3.232300005038269 2059.162400000787
+
+
+

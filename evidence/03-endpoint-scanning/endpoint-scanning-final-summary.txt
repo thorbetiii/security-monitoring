@@ -1,0 +1,121 @@
+Endpoint Scanning Scenario — Consolidated Experimental Summary
+
+Objective
+
+The endpoint-scanning experiment evaluated whether the monitoring system could detect application reconnaissance based on an abnormal increase in distinct requested paths, even when the request rate and infrastructure resource usage remained relatively low.
+
+Attack Design
+
+The attack used the Locust script:
+
+experiments/attacks/endpoint-scan-locustfile.py
+
+The script generated requests across 63 distinct candidate paths using two Locust users. The average request rate remained approximately 3.7 requests per second, which was intentionally much lower than the HTTP flood scenario.
+
+Each formal experiment used:
+
+* 10-minute normal baseline
+* 5-minute endpoint-scanning phase
+* 10-minute recovery period
+* 2 scanning users
+* 3 repeated formal runs
+
+The normal workload primarily accessed three legitimate application paths. During the scanning phase, requests were distributed across the larger path collection.
+
+Detector Under Evaluation
+
+AD-03 Endpoint Scanning Behaviour
+
+Detector ID:
+kDgI9J4B5r61GbzyHLG3
+
+Feature:
+unique_path_count
+
+The detector used the cardinality of http_req_path.keyword for completed dynamic frontend requests. Static resources and the health endpoint were excluded.
+
+Formal Results
+
+Run 01
+
+* Requests: 1,119
+* Failed requests: 0
+* Average request rate: 3.7387 requests/second
+* Average response time: 7.3286 ms
+* Observed anomalous path count: 28
+* Expected path count: 3.0028
+* Anomaly grade: 1.0
+* Confidence: approximately 0.9924
+* Detection latency: approximately 74.6 seconds
+
+Run 02
+
+* Requests: 1,117
+* Failed requests: 0
+* Average request rate: 3.7352 requests/second
+* Average response time: 7.3485 ms
+* Observed anomalous path count: 25
+* Expected path count: 3.0061
+* Anomaly grade: 1.0
+* Confidence: approximately 0.9933
+* Detection latency: approximately 73.6 seconds
+
+Run 03
+
+* Requests: 1,109
+* Failed requests: 0
+* Average request rate: 3.7081 requests/second
+* Average response time: 7.4219 ms
+* Observed anomalous path count: 63
+* Expected path count: 3.0064
+* Anomaly grade: 1.0
+* Confidence: approximately 0.9935
+* Detection latency: approximately 120.1 seconds
+
+Aggregate Results
+
+* Formal runs completed: 3
+* Successful detections: 3
+* Detection rate: 100%
+* Total scanning requests: 3,345
+* Average requests per run: 1,115
+* Average request rate: approximately 3.727 requests/second
+* Average response time: approximately 7.366 ms
+* Average detector confidence: approximately 0.9931
+* Average detection latency: approximately 89.4 seconds
+* Maximum observed distinct paths: 63
+
+Normal and Recovery Behaviour
+
+The normal unique path count was approximately three. During the attack, endpoint diversity increased substantially. After the scanning traffic stopped, the unique path count returned to the normal value of approximately three.
+
+This confirmed that the abnormal behavior was limited to the controlled attack period and that normal application behavior recovered afterward.
+
+Grafana and Kubernetes Results
+
+The endpoint scan did not create significant infrastructure pressure.
+
+* Frontend CPU Spike did not fire
+* High CPU Usage by Pod did not fire
+* High Memory Usage by Pod did not fire
+* Application Pod Not Ready did not fire
+* Application Pod Restart Detected did not fire
+* All application pods remained ready
+* No new restart-count changes occurred
+* No Locust request failures occurred
+
+Comparative Interpretation
+
+The endpoint-scanning scenario demonstrates the value of behavioral log analysis. The attack produced a strong change in application access behavior without causing sufficient CPU, memory, readiness, or restart changes to trigger infrastructure-based monitoring.
+
+AD-03 detected all three repetitions with anomaly grade 1.0 and confidence above 0.99. Grafana resource alerts remained normal throughout the experiments.
+
+This result shows that infrastructure monitoring alone would not have identified the reconnaissance activity. The application-log anomaly detector provided security visibility that resource-threshold alerts could not provide.
+
+Final Conclusion
+
+The endpoint-scanning scenario was successfully reproduced and detected in all three formal runs.
+
+AD-03 achieved a 100% formal detection rate while maintaining scenario specificity and avoiding dependence on resource exhaustion or service degradation. The application remained available, stable, and responsive throughout the experiments.
+
+Scenario status: VALIDATED AND COMPLETE

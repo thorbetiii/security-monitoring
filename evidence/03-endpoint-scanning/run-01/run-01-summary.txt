@@ -1,0 +1,34 @@
+Scenario: Controlled Endpoint Enumeration
+Experiment: Formal Run 01
+
+Attack start: 2026-06-25T07:29:18.3150508+07:00
+Attack end: 2026-06-25T07:34:19.0217816+07:00
+Recovery end: 2026-06-25T07:44:19.1154874+07:00
+
+Scan duration: 5 minutes
+Scan requests: 1119
+Locust failures: 0
+Average request rate: 3.7387 requests/second
+Average response time: 7.3286 ms
+
+Normal unique paths: 3
+Maximum attack unique paths: 63
+Recovery unique paths: 3
+
+AD-03 anomalous-window actual value: 28
+AD-03 expected value: 3.0028
+AD-03 anomaly grade: 1.0
+AD-03 confidence: 0.9924
+AD-03 result execution time: 2026-06-25T07:30:32.941+07:00
+Detection latency from attack start: 74.6 seconds
+Number of positive anomaly records: 1
+
+Grafana alerts fired: None
+Application pods ready after experiment: 9/9
+Application pod restarts: 0
+
+Interpretation:
+The behaviour-based AD-03 detector identified endpoint enumeration with
+high confidence while resource-based Grafana alerts remained normal.
+The application returned to its normal three-path behaviour after the
+scanner stopped.

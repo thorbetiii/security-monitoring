@@ -1,0 +1,17 @@
+Scenario: Controlled endpoint enumeration pilot
+Attack start: 2026-06-25T06:34:09.7312263+07:00
+Attack end: 2026-06-25T06:36:11.2289471+07:00
+Duration: 121.5 seconds
+Requests sent: 438
+Locust failures: 0
+Average request rate: 3.69 requests/second
+Average response time: 12.98 ms
+Unique paths during normal traffic: 3
+Unique paths during attack: 63
+404 responses: 431
+AD-03 expected unique paths: 2.7357
+AD-03 actual unique paths: 63
+Maximum anomaly grade: 1.0
+Confidence: 0.9922
+Detection latency: approximately 143 seconds
+Recovery: unique paths returned to 3

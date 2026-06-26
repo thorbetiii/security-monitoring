@@ -1,0 +1,4 @@
+Formal checkout-abuse Run 02 completed successfully.
+
+OpenSearch and Grafana results must still be collected before
+classifying the run as detected or not detected.

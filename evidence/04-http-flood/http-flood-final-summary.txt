@@ -1,0 +1,106 @@
+HTTP Flood Scenario — Consolidated Experimental Summary
+
+Objective
+
+The objective was to evaluate whether the monitoring system could identify a controlled application-layer HTTP flood targeting legitimate frontend routes while distinguishing the attack from endpoint scanning and service failure.
+
+Attack Design
+
+The attack generated requests against three valid routes:
+
+* /
+* /product/OLJCESPC7Z
+* /cart
+
+Each formal experiment used:
+
+* 10-minute normal baseline
+* 5-minute HTTP flood
+* 10-minute recovery
+* 20 attack users
+* 5 users/second spawn rate
+* Approximately 20 flood requests/second
+* Three repeated formal runs
+
+Aggregate Workload Results
+
+Formal runs completed: 3
+Requests per run: 5,930
+Total flood requests: 17,790
+Total failed requests: 0
+Average request rate: approximately 19.89 requests/second
+Average client response time: approximately 21.09 ms
+Observed traffic increase: approximately 36 times normal traffic
+
+All observed HTTP responses were successful. Request traffic returned to the normal range after every flood.
+
+Availability Results
+
+All nine application pods remained ready after every run.
+No attack-induced restart-count changes occurred.
+Application Pod Not Ready did not fire.
+Application Pod Restart Detected did not fire.
+
+The application therefore remained available during all three controlled floods.
+
+OpenSearch Anomaly Detection Results
+
+AD-01 Application Log Volume:
+
+* Run 01: detected, anomaly grade 1.0, confidence 1.0
+* Run 02: detected, anomaly grade 0.25, confidence 1.0
+* Run 03: processed attack data but assigned anomaly grade 0
+* Formal detection rate: 2/3, or 66.7%
+
+AD-02R Frontend HTTP Behaviour:
+
+* Pilot: detected the flood pattern
+* Run 01: no positive anomaly
+* Run 02: no positive anomaly
+* Run 03: processed request counts above 1,200 per interval but assigned anomaly grade 0
+* Formal detection rate: 0/3
+
+AD-03 Endpoint Scanning Behaviour:
+
+* Remained quiet in all three runs
+* This was the correct outcome because unique path count remained fixed at three
+* Correct scenario specificity: 3/3
+
+Grafana Rule-Based Detection Results
+
+Frontend CPU Spike:
+
+* Fired in all three formal runs
+* Detection rate: 3/3, or 100%
+
+High CPU Usage by Pod:
+
+* Fired in all three formal runs
+* Currencyservice was consistently affected
+* Detection rate: 3/3, or 100%
+
+High Memory Usage by Pod:
+
+* Fired in all three formal runs
+* Currencyservice working-set memory remained elevated during recovery
+* Detection rate: 3/3, or 100%
+
+The memory behavior is described as persistent elevated working-set memory. It is not classified as a confirmed memory leak because heap or process-level profiling was not performed.
+
+Comparative Evaluation
+
+The rule-based Grafana alerts provided repeatable detection of resource pressure across all three formal runs.
+
+AD-01 detected the first two runs but did not classify the third repetition as anomalous despite processing a major log-volume increase.
+
+AD-02R processed valid request-count and average-latency values but did not detect any formal repetition. The earlier pilot detection indicates that the detector was capable of identifying the pattern at an earlier stage.
+
+A possible interpretation is that the online Random Cut Forest models became less sensitive after observing repeated flood-shaped traffic. This remains an interpretation rather than a proven internal-model explanation.
+
+Final Conclusion
+
+The HTTP flood scenario successfully demonstrated the value of combining adaptive anomaly detection with deterministic infrastructure monitoring.
+
+Grafana consistently detected CPU and memory pressure. OpenSearch AD provided useful behavioral detection in some runs but showed inconsistent sensitivity under repeated similar attacks. The application remained available throughout all experiments, demonstrating that security-relevant resource pressure can occur before visible service failure.
+
+Scenario status: VALIDATED AND COMPLETE

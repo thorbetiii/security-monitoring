@@ -13,7 +13,7 @@ def checkout_payload() -> dict[str, str]:
     expiration_year = datetime.now(timezone.utc).year + 1
 
     return {
-        "email": "normal-user@example.com",
+        "email": "automated-checkout@example.com",
         "street_address": "1600 Amphitheatre Parkway",
         "zip_code": "94043",
         "city": "Mountain View",
@@ -26,20 +26,21 @@ def checkout_payload() -> dict[str, str]:
     }
 
 
-class NormalCheckoutUser(HttpUser):
+class CheckoutAbuseUser(HttpUser):
     """
-    Produces low-frequency legitimate checkout activity.
+    Repeatedly completes valid checkout workflows using a persistent session.
 
-    Each HttpUser keeps its own cookie jar, so the frontend session remains
-    stable for the lifetime of that simulated user.
+    Each Locust user retains its own cookies. Therefore, five users should
+    create approximately five stable attack sessions rather than a new
+    session for every request.
     """
 
-    wait_time = between(60, 90)
+    wait_time = between(3, 5)
 
     def on_start(self) -> None:
         with self.client.get(
             "/",
-            name="/ [checkout baseline session]",
+            name="/ [checkout abuse session]",
             catch_response=True,
         ) as response:
             if response.status_code != 200:
@@ -48,10 +49,10 @@ class NormalCheckoutUser(HttpUser):
                 )
 
     @task
-    def complete_checkout(self) -> None:
+    def repeat_checkout(self) -> None:
         with self.client.get(
             f"/product/{PRODUCT_ID}",
-            name="/product/[id] [checkout baseline]",
+            name="/product/[id] [checkout abuse]",
             catch_response=True,
         ) as response:
             if response.status_code != 200:
@@ -66,7 +67,7 @@ class NormalCheckoutUser(HttpUser):
                 "product_id": PRODUCT_ID,
                 "quantity": "1",
             },
-            name="/cart [add item baseline]",
+            name="/cart [add item abuse]",
             allow_redirects=False,
             catch_response=True,
         ) as response:
@@ -79,7 +80,7 @@ class NormalCheckoutUser(HttpUser):
 
         with self.client.get(
             "/cart",
-            name="/cart [view baseline]",
+            name="/cart [view abuse]",
             catch_response=True,
         ) as response:
             if response.status_code != 200:
@@ -91,7 +92,7 @@ class NormalCheckoutUser(HttpUser):
         with self.client.post(
             "/cart/checkout",
             data=checkout_payload(),
-            name="/cart/checkout [normal]",
+            name="/cart/checkout [abuse]",
             catch_response=True,
         ) as response:
             if response.status_code != 200:

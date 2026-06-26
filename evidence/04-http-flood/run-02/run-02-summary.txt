@@ -1,0 +1,72 @@
+Scenario: Controlled Application-Layer HTTP Flood
+Experiment: Formal Run 02
+
+Experiment start: 2026-06-25T19:40:49.1535091+07:00
+Attack start: 2026-06-25T19:50:49.1535091+07:00
+Attack end: 2026-06-25T19:55:49.6767541+07:00
+Recovery end: 2026-06-25T20:05:49.6793034+07:00
+
+Flood users: 20
+Flood duration: 5 minutes
+Flood requests: 5930
+Failure count: 0
+Average rate: 19.8925 requests/second
+Average Locust response time: 21.7720 ms
+Maximum Locust response time: 2090.2490 ms
+
+Normal request rate: 33.89 requests/minute
+Full flood request rate: 1233.75 requests/minute
+Recovery request rate: 33.78 requests/minute
+Increase over normal: 36.4 times
+Unique paths: 3 throughout
+Observed HTTP statuses: all 200
+Request-rate recovery: confirmed
+
+AD-01:
+Actual log count: 4848
+Expected log count: 396.5078
+Actual-to-expected ratio: 12.23
+Anomaly grade: 0.25
+Confidence: 1.0
+Detection latency: approximately 87.0 seconds
+
+AD-02R:
+No positive anomaly result
+
+AD-03:
+No positive anomaly result, as expected because route diversity remained unchanged
+
+Frontend CPU Spike:
+Pending: 19:53:20
+Firing: 19:54:20
+Normal: 19:58:20
+Firing latency: approximately 210.8 seconds
+Resolved approximately 150.3 seconds after attack end
+
+High CPU Usage by Pod:
+Pod: currencyservice-76cfbb9979-hm985
+Pending: 19:54:21
+Firing: 19:55:21
+Normal: 19:57:21
+Firing latency: approximately 271.8 seconds
+
+High Memory Usage by Pod:
+Pod: currencyservice-76cfbb9979-hm985
+Pending: 19:52:55
+Firing: 19:53:55
+Firing latency: approximately 185.8 seconds
+Memory remained elevated during recovery
+
+Availability:
+All 9 application pods remained ready
+No new restart-counter changes occurred
+Application Pod Not Ready did not fire
+Application Pod Restart Detected did not fire
+
+Interpretation:
+The attack caused a repeatable 36-times increase in legitimate-route
+HTTP traffic. AD-01 and Grafana resource alerts detected the attack.
+AD-02R did not generate a positive anomaly, while AD-03 correctly
+remained quiet because endpoint diversity did not increase. Services
+remained available, although currencyservice working-set memory
+remained persistently elevated.

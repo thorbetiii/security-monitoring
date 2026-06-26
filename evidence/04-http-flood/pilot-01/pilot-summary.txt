@@ -1,0 +1,55 @@
+Scenario: Controlled Application-Layer HTTP Flood
+Experiment: Calibration Pilot 01
+
+Attack start: 2026-06-25T15:30:42.4502918+07:00
+Attack end: 2026-06-25T15:33:43.2159923+07:00
+Recovery observation end: 2026-06-25T15:38:43.3044732+07:00
+
+Flood users: 20
+Spawn rate: 5 users/second
+Target throughput: approximately 20 requests/second
+Flood duration: 3 minutes
+
+Flood requests: 3550
+Locust failures: 0
+Average request rate: 19.8222 requests/second
+Average Locust response time: 28.6899 ms
+
+Normal frontend requests: approximately 32-36 per minute
+Maximum flood frontend requests: 1234 per minute
+Unique paths: 3 during both normal and attack phases
+HTTP status: all observed requests returned 200
+
+AD-01 actual log count: 5970
+AD-01 expected log count: 403.1304
+AD-01 anomaly grade: 1.0
+AD-01 confidence: 1.0
+
+AD-02R actual request count: 1233
+AD-02R expected request count: 43.9709
+AD-02R actual average latency: 7.5077 ms
+AD-02R expected average latency: 8.5979 ms
+AD-02R anomaly grade: 0.1875
+AD-02R confidence: 0.7413
+Primary attribution: request_count
+
+Grafana alerts:
+- Frontend CPU Spike: Fired
+- High CPU Usage by Pod: Fired for frontend
+- High Memory Usage by Pod: Fired for currencyservice
+- Pod Not Ready: Did not fire
+- Pod Restart Detected: Did not fire
+
+Availability:
+- Locust failures: 0
+- New pod restarts during pilot: 0
+- Application remained available
+
+Recovery:
+- Request count returned to baseline
+- Frontend CPU returned toward baseline
+- Currencyservice memory remained elevated at approximately 215 MiB
+- A controlled currencyservice reset was performed before formal testing
+
+Calibration decision:
+Twenty users are sufficient for the formal experiment.

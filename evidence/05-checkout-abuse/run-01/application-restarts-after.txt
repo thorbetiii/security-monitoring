@@ -1,0 +1,10 @@
+POD                                     READY   RESTARTS
+cartservice-55d4754bd7-kvx42            true    11
+checkoutservice-69775cb597-pzkcj        true    11
+currencyservice-9759f6f9d-gr2c2         true    1
+emailservice-d8847778d-zc7mz            true    11
+frontend-545d4c6658-jtkjk               true    11
+paymentservice-57c96df968-lshzp         true    11
+productcatalogservice-f9cffdb98-s4c5n   true    11
+redis-cart-5dc857bb5d-j48tx             true    11
+shippingservice-d8f49964c-6gkjc         true    11
