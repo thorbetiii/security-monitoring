@@ -1,0 +1,357 @@
+apiVersion: 1
+groups:
+    - orgId: 1
+      name: application-metrics
+      folder: Security Monitoring Rules
+      interval: 30s
+      rules:
+        - uid: ffnz8wpqy4y68d
+          title: Application Pod Not Ready
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: prometheus
+              model:
+                editorMode: code
+                expr: "sum by (pod) (\r\n  kube_pod_status_ready{namespace=\"application\", condition=\"true\"}\r\n)"
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: C
+              queryType: expression
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 1
+                        type: lt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 1m
+          annotations:
+            description: Pod {{ $labels.pod }} in the application namespace is not ready. This may indicate service failure, overload, or an unstable deployment during testing.
+            summary: Application pod is not ready
+          labels:
+            category: availability
+            namespace: application
+            project: security-monitoring
+            serverity: critical
+          isPaused: false
+          notification_settings:
+            receiver: empty
+        - uid: ffnz98hg2lukge
+          title: Application Pod Restart Detected
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: prometheus
+              model:
+                editorMode: code
+                expr: "sum by (pod) (\r\n  increase(kube_pod_container_status_restarts_total{namespace=\"application\"}[5m])\r\n)"
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: C
+              queryType: expression
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 1m
+          annotations:
+            description: Pod {{ $labels.pod }} restarted within the last 5 minutes. This may indicate a crash, resource pressure, or instability during abnormal traffic.
+            summary: Application pod restarted
+          labels:
+            category: stability
+            namespace: application
+            project: security-monitoring
+            serverity: warning
+          isPaused: false
+          notification_settings:
+            receiver: empty
+        - uid: cfnz9ffcxe1hcb
+          title: Frontend CPU Spike
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: prometheus
+              model:
+                editorMode: code
+                expr: "sum by (pod) (\r\n  rate(container_cpu_usage_seconds_total{namespace=\"application\", pod=~\"frontend.*\"}[5m])\r\n)"
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: C
+              queryType: expression
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0.05
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 1m
+          annotations:
+            description: Frontend pod {{ $labels.pod }} has increased CPU usage. This may be caused by high request volume, HTTP flood traffic, or endpoint scanning.
+            summary: Frontend CPU spike detected
+          labels:
+            category: resource
+            namespace: application
+            project: security-monitoring
+            scenario: http-flood-endpoint-scanning
+            serverity: warning
+          isPaused: false
+          notification_settings:
+            receiver: empty
+        - uid: dfnz9rtcr8a2of
+          title: Checkout Service CPU Spike
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: prometheus
+              model:
+                editorMode: code
+                expr: "sum by (pod) (\r\n  rate(container_cpu_usage_seconds_total{namespace=\"application\", pod=~\"checkoutservice.*\"}[5m])\r\n)"
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: C
+              queryType: expression
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0.03
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 1m
+          annotations:
+            description: Checkout service pod {{ $labels.pod }} has increased CPU usage. This may indicate abnormal checkout activity or business workflow abuse.
+            summary: Checkout service CPU spike detected
+          labels:
+            category: resource
+            namespace: application
+            project: security-monitoring
+            scenario: checkout-abuse
+            serverity: warning
+          isPaused: false
+          notification_settings:
+            receiver: empty
+        - uid: cfnz9x624q9s0c
+          title: High CPU Usage by Pod
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: prometheus
+              model:
+                editorMode: code
+                expr: "sum by (pod) (\r\n  rate(container_cpu_usage_seconds_total{namespace=\"application\"}[5m])\r\n)"
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: C
+              queryType: expression
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0.05
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 1m
+          annotations:
+            description: Pod {{ $labels.pod }} is using high CPU. This may indicate abnormal traffic, service pressure, or resource-intensive behaviour.
+            summary: High CPU usage detected
+          labels:
+            category: resource
+            namespace: application
+            project: security-monitoring
+            serverity: warning
+          isPaused: false
+          notification_settings:
+            receiver: empty
+        - uid: dfnza1xsswohsd
+          title: High Memory Usage by Pod
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: prometheus
+              model:
+                editorMode: code
+                expr: "sum by (pod) (\r\n  container_memory_working_set_bytes{namespace=\"application\"}\r\n)"
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: C
+              queryType: expression
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 1.5e+08
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 1m
+          annotations:
+            description: Pod {{ $labels.pod }} is using high memory. This may indicate memory pressure, abnormal workload, or unstable service behavior.
+            summary: High memory usage detected
+          labels:
+            category: resource
+            namespace: application
+            project: security-monitoring
+            serverity: warning
+          isPaused: false
+          notification_settings:
+            receiver: empty

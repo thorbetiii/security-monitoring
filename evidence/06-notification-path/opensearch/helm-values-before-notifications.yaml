@@ -1,0 +1,195 @@
+COMPUTED VALUES:
+antiAffinity: soft
+antiAffinityTopologyKey: kubernetes.io/hostname
+clusterName: opensearch-cluster
+config:
+  opensearch.yml: |
+    cluster.name: opensearch-cluster
+    network.host: 0.0.0.0
+    discovery.type: single-node
+    plugins.security.disabled: true
+customAntiAffinity: {}
+enableServiceLinks: true
+envFrom: []
+extraContainers: []
+extraEnvs:
+- name: DISABLE_INSTALL_DEMO_CONFIG
+  value: "true"
+- name: DISABLE_SECURITY_PLUGIN
+  value: "true"
+extraInitContainers: []
+extraObjects: []
+extraVolumeMounts: []
+extraVolumes: []
+fsGroup: ""
+fullnameOverride: ""
+global:
+  dockerRegistry: ""
+hostAliases: []
+httpHostPort: ""
+httpPort: 9200
+image:
+  pullPolicy: IfNotPresent
+  repository: opensearchproject/opensearch
+  tag: ""
+imagePullSecrets: []
+ingress:
+  annotations: {}
+  enabled: false
+  hosts:
+  - chart-example.local
+  ingressLabels: {}
+  path: /
+  tls: []
+initResources: {}
+keystore: []
+labels: {}
+lifecycle: {}
+livenessProbe: {}
+majorVersion: ""
+masterService: opensearch-cluster-master
+masterTerminationFix: false
+maxUnavailable: 1
+metricsPort: 9600
+nameOverride: ""
+networkHost: 0.0.0.0
+networkPolicy:
+  create: false
+  http:
+    enabled: false
+nodeAffinity: {}
+nodeGroup: single
+nodeSelector: {}
+openSearchAnnotations: {}
+opensearchHome: /usr/share/opensearch
+opensearchJavaOpts: -Xmx512M -Xms512M
+opensearchLifecycle: {}
+persistence:
+  accessModes:
+  - ReadWriteOnce
+  annotations: {}
+  enableInitChown: true
+  enabled: true
+  labels:
+    additionalLabels: {}
+    enabled: false
+  size: 8Gi
+plugins:
+  enabled: false
+  installList: []
+  removeList: []
+podAffinity: {}
+podAnnotations: {}
+podManagementPolicy: Parallel
+podSecurityContext:
+  fsGroup: 1000
+  runAsUser: 1000
+podSecurityPolicy:
+  create: false
+  name: ""
+  spec:
+    fsGroup:
+      rule: RunAsAny
+    privileged: true
+    runAsUser:
+      rule: RunAsAny
+    seLinux:
+      rule: RunAsAny
+    supplementalGroups:
+      rule: RunAsAny
+    volumes:
+    - secret
+    - configMap
+    - persistentVolumeClaim
+    - emptyDir
+priorityClassName: ""
+protocol: https
+rbac:
+  automountServiceAccountToken: false
+  create: false
+  serviceAccountAnnotations: {}
+  serviceAccountName: ""
+readinessProbe:
+  failureThreshold: 10
+  initialDelaySeconds: 60
+  periodSeconds: 10
+  tcpSocket:
+    port: 9200
+  timeoutSeconds: 5
+replicas: 1
+resources:
+  limits:
+    cpu: "1"
+    memory: 2Gi
+  requests:
+    cpu: 500m
+    memory: 1Gi
+roles:
+- master
+- ingest
+- data
+- remote_cluster_client
+schedulerName: ""
+secretMounts: []
+securityConfig:
+  actionGroupsSecret: null
+  config:
+    data: {}
+    dataComplete: true
+    securityConfigSecret: ""
+  configSecret: null
+  enabled: true
+  internalUsersSecret: null
+  path: /usr/share/opensearch/config/opensearch-security
+  rolesMappingSecret: null
+  rolesSecret: null
+  tenantsSecret: null
+securityContext:
+  capabilities:
+    drop:
+    - ALL
+  runAsNonRoot: true
+  runAsUser: 1000
+service:
+  annotations: {}
+  externalTrafficPolicy: ""
+  headless:
+    annotations: {}
+  httpPortName: http
+  labels: {}
+  labelsHeadless: {}
+  loadBalancerIP: ""
+  loadBalancerSourceRanges: []
+  metricsPortName: metrics
+  nodePort: ""
+  transportPortName: transport
+  type: ClusterIP
+serviceMonitor:
+  basicAuth:
+    enabled: false
+  enabled: false
+  interval: 10s
+  labels: {}
+  path: /_prometheus/metrics
+  scheme: http
+  tlsConfig: {}
+sidecarResources: {}
+singleNode: true
+startupProbe:
+  failureThreshold: 30
+  initialDelaySeconds: 60
+  periodSeconds: 10
+  tcpSocket:
+    port: 9200
+  timeoutSeconds: 5
+sysctl:
+  enabled: false
+sysctlInit:
+  enabled: false
+sysctlVmMaxMapCount: 262144
+terminationGracePeriod: 120
+tolerations: []
+topologySpreadConstraints: []
+transportHostPort: ""
+transportPort: 9300
+updateStrategy: RollingUpdate

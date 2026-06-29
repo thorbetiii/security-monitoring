@@ -1,5 +1,6 @@
 grafana:
   enabled: true
+
   adminUser: admin
   adminPassword: admin123
 
@@ -8,9 +9,35 @@ grafana:
 
   defaultDashboardsEnabled: true
 
+  deploymentStrategy:
+    type: Recreate
+
+  initChownData:
+    enabled: false
+
+  persistence:
+    enabled: true
+    type: pvc
+    existingClaim: grafana-storage
+
+  smtp:
+    existingSecret: grafana-smtp-credentials
+    userKey: user
+    passwordKey: password
+
+  grafana.ini:
+    smtp:
+      enabled: true
+      host: smtp.gmail.com:587
+      from_address: thdatwater1911@gmail.com
+      from_name: "Thesis Security Monitoring"
+      skip_verify: false
+      startTLS_policy: MandatoryStartTLS
+
   sidecar:
     dashboards:
       enabled: true
+
     datasources:
       enabled: true
 
@@ -21,7 +48,6 @@ prometheus:
     serviceMonitorSelectorNilUsesHelmValues: false
     podMonitorSelectorNilUsesHelmValues: false
     ruleSelectorNilUsesHelmValues: false
-
     retention: 7d
 
 alertmanager:
@@ -31,7 +57,7 @@ kubeStateMetrics:
   enabled: true
 
 nodeExporter:
-  enabled: true
+  enabled: false
 
 prometheusOperator:
   enabled: true

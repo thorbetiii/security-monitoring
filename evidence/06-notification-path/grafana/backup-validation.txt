@@ -1,0 +1,15 @@
+
+
+DashboardExports         : 29
+AlertRulesExport         : True
+AlertRulesBytes          : 12307
+NotificationPolicyExport : True
+NotificationPolicyBytes  : 122
+GrafanaArchive           : True
+GrafanaArchiveBytes      : 21830724
+GrafanaDatabase          : True
+GrafanaDatabaseBytes     : 3244032
+
+
+
+

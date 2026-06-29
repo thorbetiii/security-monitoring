@@ -1,0 +1,13 @@
+
+
+Timestamp          : 2026-06-29 11:27:21
+GrafanaPod         : monitoring-grafana-7cb678db96-94kpz
+MountedPVC         : grafana-storage
+DashboardCount     : 24
+AlertRuleCount     : 6
+ExpectedDashboards : 29
+ExpectedAlertRules : 6
+
+
+
+
