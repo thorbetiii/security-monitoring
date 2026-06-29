@@ -1,0 +1,200 @@
+﻿{
+    "alerts":  [
+                   {
+                       "id":  "BoN_Ep8BI7zxBL3-IXQK",
+                       "version":  1,
+                       "monitor_id":  "RoJUEp8BI7zxBL3-8ciT",
+                       "workflow_id":  "",
+                       "workflow_name":  "",
+                       "associated_alert_ids":  [
+
+                                                ],
+                       "schema_version":  5,
+                       "monitor_version":  1,
+                       "monitor_name":  "MON-AD01-Application-Log-Volume",
+                       "execution_id":  "RoJUEp8BI7zxBL3-8ciT_2026-06-29T08:29:04.593931753_c0080f97-f1ce-4692-a456-11d236b3eebb",
+                       "trigger_id":  "RIJUEp8BI7zxBL3-8ciP",
+                       "trigger_name":  "TRG-AD01",
+                       "finding_ids":  [
+
+                                       ],
+                       "related_doc_ids":  [
+
+                                           ],
+                       "state":  "COMPLETED",
+                       "error_message":  null,
+                       "alert_history":  [
+
+                                         ],
+                       "severity":  "1",
+                       "action_execution_results":  [
+                                                        {
+                                                            "action_id":  "notification069551",
+                                                            "last_execution_time":  1782721749160,
+                                                            "throttled_count":  0
+                                                        }
+                                                    ],
+                       "start_time":  1782721749258,
+                       "last_notification_time":  1782721749258,
+                       "end_time":  1782721864600,
+                       "acknowledged_time":  null
+                   },
+                   {
+                       "id":  "q4J7Ep8BI7zxBL3-KvB4",
+                       "version":  1,
+                       "monitor_id":  "mYJYEp8BI7zxBL3-Tsh1",
+                       "workflow_id":  "",
+                       "workflow_name":  "",
+                       "associated_alert_ids":  [
+
+                                                ],
+                       "schema_version":  5,
+                       "monitor_version":  1,
+                       "monitor_name":  "MON-AD04R-Checkout-Workflow",
+                       "execution_id":  "mYJYEp8BI7zxBL3-Tsh1_2026-06-29T08:24:44.984819196_f1d7714e-8d8c-416f-93c6-1ed594c7a1f3",
+                       "trigger_id":  "l4JYEp8BI7zxBL3-Tshy",
+                       "trigger_name":  "TRG-AD04R",
+                       "finding_ids":  [
+
+                                       ],
+                       "related_doc_ids":  [
+
+                                           ],
+                       "state":  "COMPLETED",
+                       "error_message":  null,
+                       "alert_history":  [
+
+                                         ],
+                       "severity":  "1",
+                       "action_execution_results":  [
+                                                        {
+                                                            "action_id":  "notification223839",
+                                                            "last_execution_time":  1782721489526,
+                                                            "throttled_count":  0
+                                                        }
+                                                    ],
+                       "start_time":  1782721489527,
+                       "last_notification_time":  1782721489527,
+                       "end_time":  1782721604984,
+                       "acknowledged_time":  null
+                   },
+                   {
+                       "id":  "oIJ3Ep8BI7zxBL3-ys8r",
+                       "version":  1,
+                       "monitor_id":  "RoJUEp8BI7zxBL3-8ciT",
+                       "workflow_id":  "",
+                       "workflow_name":  "",
+                       "associated_alert_ids":  [
+
+                                                ],
+                       "schema_version":  5,
+                       "monitor_version":  1,
+                       "monitor_name":  "MON-AD01-Application-Log-Volume",
+                       "execution_id":  "RoJUEp8BI7zxBL3-8ciT_2026-06-29T08:21:04.593674437_eca885c8-0526-4c24-b042-0b8c7c577d30",
+                       "trigger_id":  "RIJUEp8BI7zxBL3-8ciP",
+                       "trigger_name":  "TRG-AD01",
+                       "finding_ids":  [
+
+                                       ],
+                       "related_doc_ids":  [
+
+                                           ],
+                       "state":  "COMPLETED",
+                       "error_message":  null,
+                       "alert_history":  [
+
+                                         ],
+                       "severity":  "1",
+                       "action_execution_results":  [
+                                                        {
+                                                            "action_id":  "notification069551",
+                                                            "last_execution_time":  1782721268159,
+                                                            "throttled_count":  0
+                                                        }
+                                                    ],
+                       "start_time":  1782721268267,
+                       "last_notification_time":  1782721268267,
+                       "end_time":  1782721384599,
+                       "acknowledged_time":  null
+                   },
+                   {
+                       "id":  "l4J3Ep8BI7zxBL3-Xc-n",
+                       "version":  1,
+                       "monitor_id":  "boJWEp8BI7zxBL3-Wsgw",
+                       "workflow_id":  "",
+                       "workflow_name":  "",
+                       "associated_alert_ids":  [
+
+                                                ],
+                       "schema_version":  5,
+                       "monitor_version":  1,
+                       "monitor_name":  "MON-AD02R-Frontend-HTTP-Behaviour",
+                       "execution_id":  "boJWEp8BI7zxBL3-Wsgw_2026-06-29T08:20:36.912089538_cccf3a83-1a44-4b17-bec2-74259fd95482",
+                       "trigger_id":  "bIJWEp8BI7zxBL3-Wsgt",
+                       "trigger_name":  "TRG-AD02R",
+                       "finding_ids":  [
+
+                                       ],
+                       "related_doc_ids":  [
+
+                                           ],
+                       "state":  "COMPLETED",
+                       "error_message":  null,
+                       "alert_history":  [
+
+                                         ],
+                       "severity":  "1",
+                       "action_execution_results":  [
+                                                        {
+                                                            "action_id":  "notification860301",
+                                                            "last_execution_time":  1782721240338,
+                                                            "throttled_count":  0
+                                                        }
+                                                    ],
+                       "start_time":  1782721240487,
+                       "last_notification_time":  1782721240487,
+                       "end_time":  1782721356914,
+                       "acknowledged_time":  null
+                   },
+                   {
+                       "id":  "rIJ2Ep8BI7zxBL3-bc2z",
+                       "version":  1,
+                       "monitor_id":  "44JOEp8BI7zxBL3-Fcc6",
+                       "workflow_id":  "",
+                       "workflow_name":  "",
+                       "associated_alert_ids":  [
+
+                                                ],
+                       "schema_version":  5,
+                       "monitor_version":  2,
+                       "monitor_name":  "MON-AD03-Endpoint-Scanning",
+                       "execution_id":  "44JOEp8BI7zxBL3-Fcc6_2026-06-29T08:19:34.761857097_d3317995-fdd5-4bc0-a47a-2f9a25460591",
+                       "trigger_id":  "3oJOEp8BI7zxBL3-FMdm",
+                       "trigger_name":  "TRG-AD03-Endpoint-Scanning-Anomaly",
+                       "finding_ids":  [
+
+                                       ],
+                       "related_doc_ids":  [
+
+                                           ],
+                       "state":  "COMPLETED",
+                       "error_message":  null,
+                       "alert_history":  [
+
+                                         ],
+                       "severity":  "1",
+                       "action_execution_results":  [
+                                                        {
+                                                            "action_id":  "notification394521",
+                                                            "last_execution_time":  1782721178895,
+                                                            "throttled_count":  0
+                                                        }
+                                                    ],
+                       "start_time":  1782721179056,
+                       "last_notification_time":  1782721179056,
+                       "end_time":  1782721294765,
+                       "acknowledged_time":  null
+                   }
+               ],
+    "totalAlerts":  5
+}
